@@ -52,6 +52,7 @@ type Configuration struct {
 	MySQLOrchestratorHost                        string
 	MySQLOrchestratorMaxPoolConnections          int // The maximum size of the connection pool to the Orchestrator backend.
 	MySQLOrchestratorPort                        uint
+	MySQLOrchestratorSocket                      string
 	MySQLOrchestratorDatabase                    string
 	MySQLOrchestratorUser                        string
 	MySQLOrchestratorPassword                    string

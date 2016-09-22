@@ -14,6 +14,7 @@
   "DatabaselessMode__experimental": false,
   "MySQLOrchestratorHost": "127.0.0.1",
   "MySQLOrchestratorPort": 3306,
+  "MySQLOrchestratorSocket": "",
   "MySQLOrchestratorDatabase": "orchestrator",
   "MySQLOrchestratorUser": "orc_server_user",
   "MySQLOrchestratorPassword": "orc_server_password",

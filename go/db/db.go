@@ -910,11 +910,14 @@ func OpenOrchestrator() (*sql.DB, error) {
 	if config.Config.DatabaselessMode__experimental {
 		return nil, nil
 	}
-	mysql_uri := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?timeout=%ds&readTimeout=%ds",
+	address := fmt.Sprintf("tcp(%s:%d)", config.Config.MySQLOrchestratorHost, config.Config.MySQLOrchestratorPort)
+	if config.Config.MySQLOrchestratorSocket != "" {
+		address = fmt.Sprintf("unix(%s)", config.Config.MySQLOrchestratorSocket)
+	}
+	mysql_uri := fmt.Sprintf("%s:%s@%s/%s?timeout=%ds&readTimeout=%ds",
 		config.Config.MySQLOrchestratorUser,
 		config.Config.MySQLOrchestratorPassword,
-		config.Config.MySQLOrchestratorHost,
-		config.Config.MySQLOrchestratorPort,
+		address,
 		config.Config.MySQLOrchestratorDatabase,
 		config.Config.MySQLConnectTimeoutSeconds,
 		config.Config.MySQLOrchestratorReadTimeoutSeconds,
@@ -927,8 +930,8 @@ func OpenOrchestrator() (*sql.DB, error) {
 		initOrchestratorDB(db)
 
 		// do not show the password but do show what we connect to.
-		safe_mysql_uri := fmt.Sprintf("%s:?@tcp(%s:%d)/%s?timeout=%ds", config.Config.MySQLOrchestratorUser,
-			config.Config.MySQLOrchestratorHost, config.Config.MySQLOrchestratorPort, config.Config.MySQLOrchestratorDatabase, config.Config.MySQLConnectTimeoutSeconds)
+		safe_mysql_uri := fmt.Sprintf("%s:?@%s/%s?timeout=%ds", config.Config.MySQLOrchestratorUser,
+			address, config.Config.MySQLOrchestratorDatabase, config.Config.MySQLConnectTimeoutSeconds)
 		log.Debugf("Connected to orchestrator backend: %v", safe_mysql_uri)
 		if config.Config.MySQLOrchestratorMaxPoolConnections > 0 {
 			log.Debugf("Orchestrator pool SetMaxOpenConns: %d", config.Config.MySQLOrchestratorMaxPoolConnections)
